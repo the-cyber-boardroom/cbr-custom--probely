@@ -7,16 +7,16 @@ on:
       - main
 
 env:
-  GIT__BRANCH          : 'main'
-  PACKAGE_NAME         : 'cbr_custom'
-  AWS_ACCESS_KEY_ID    : ${{ secrets.AWS_ACCESS_KEY_ID__470426667096     }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY__470426667096 }}
-  CBR__CONFIG_FILE     : 'cbr-website.community-cbr-hosted.toml'
-  AWS_REGION: eu-west-1
-  CBR__CUSTOM__PATH_CUSTOM_CODE: "/app/custom"
+  GIT__BRANCH          :           'main'
+  PACKAGE_NAME                    : 'cbr_custom_probely'
+  AWS_ACCESS_KEY_ID               : ${{ secrets.AWS_ACCESS_KEY_ID__470426667096     }}
+  AWS_SECRET_ACCESS_KEY           : ${{ secrets.AWS_SECRET_ACCESS_KEY__470426667096 }}
+  CBR__CONFIG_FILE                : 'cbr-website.community-cbr-hosted.toml'
+  AWS_REGION                      : eu-west-1
+  CBR__CUSTOM__PATH_CUSTOM_CODE   : "./cbr_custom_probely/custom"
   CBR__CUSTOM__PACKAGES_TO_INSTALL: '["cbr_website_beta", "cbr_static"]'
-  S3_DEV__BUCKET: "654654216424--cbr-deploy--eu-west-1"
-  S3_DEV__PARENT_FOLDER: "cbr-custom-websites"
+  S3_DEV__BUCKET                  : "654654216424--cbr-deploy--eu-west-1"
+  S3_DEV__PARENT_FOLDER           : "cbr-custom-websites"
 
 jobs:
 
@@ -39,8 +39,8 @@ jobs:
       image: diniscruz/cbr_website_beta:latest
       options: --platform linux/amd64
     env:
-      S3_DEV__VERSION   : 'prod__cbr_custom'
-      FOLDER__CBR_CUSTOM: "./cbr_custom"
+      S3_DEV__VERSION   : 'prod__cbr_custom_probely'
+      FOLDER__CBR_CUSTOM: "./cbr_custom_probely"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
