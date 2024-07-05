@@ -1,7 +1,7 @@
-name       : CI Pipeline - DEV
+name       : CI Pipeline - DEV (QA)
 on:
   repository_dispatch:
-    types: [ deploy-cbr-custom-dev ]
+    types: [ deploy-cbr-custom-qa ]
   push:
     branches:
       - dev
@@ -11,22 +11,34 @@ env:
   PACKAGE_NAME                    : 'cbr_custom'
   AWS_ACCESS_KEY_ID               : ${{ secrets.AWS_ACCESS_KEY_ID__470426667096     }}
   AWS_SECRET_ACCESS_KEY           : ${{ secrets.AWS_SECRET_ACCESS_KEY__470426667096 }}
-  #CBR__CONFIG_FILE                : 'cbr-website.community-cbr-hosted.toml'
+  CBR__CONFIG_FILE                : 'cbr-website.community-cbr-hosted.toml'
   AWS_REGION                      : eu-west-1
-  CBR__CUSTOM__PATH_CUSTOM_CODE   : "./cbr_custom/custom"
+  CBR__CUSTOM__PATH_CUSTOM_CODE   : "/app/custom"
   CBR__CUSTOM__PACKAGES_TO_INSTALL: '["cbr_website_beta", "cbr_static"]'
   S3_DEV__BUCKET                  : "654654216424--cbr-deploy--eu-west-1"
   S3_DEV__PARENT_FOLDER           : "cbr-custom-websites"
 
 jobs:
 
+  increment-tag:
+    name: Increment Tag - DEV
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Increment Tag (for DEV)
+        uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/git__increment-tag@dev
+        with:
+          release_type : 'minor'
 
-  deploy-cbr-custom:
+  deploy-custom-version-cbr-custom:
     timeout-minutes: 5
     name: "Deploy CBR - CBR Custom"
     runs-on: ubuntu-latest
+    container:
+      image: diniscruz/cbr_website_beta:latest
+      options: --platform linux/amd64
     env:
-      S3_DEV__VERSION   : 'dev__cbr_custom'
+      S3_DEV__VERSION   : 'qa__cbr_custom'
       FOLDER__CBR_CUSTOM: "./cbr_custom"
     steps:
       - name: Checkout repository
@@ -34,6 +46,8 @@ jobs:
         with:
           ref: ${{ env.GIT__BRANCH }}
       - name: Deploy Custom code
-        uses: ./.github/actions/deploy-cbr-dev-site
+        uses: ./.github/actions/deploy-cbr-custom-site
+    needs:
+      - increment-tag
 
 
