@@ -8,7 +8,7 @@ on:
 
 env:
   GIT__BRANCH                     : 'dev'
-  PACKAGE_NAME                    : 'cbr_custom'
+  PACKAGE_NAME                    : 'cbr_custom_probely'
   AWS_ACCESS_KEY_ID               : ${{ secrets.AWS_ACCESS_KEY_ID__470426667096     }}
   AWS_SECRET_ACCESS_KEY           : ${{ secrets.AWS_SECRET_ACCESS_KEY__470426667096 }}
   #CBR__CONFIG_FILE                : 'cbr-website.community-cbr-hosted.toml'
@@ -20,14 +20,25 @@ env:
 
 jobs:
 
+  increment-tag:
+    name: Increment Tag - DEV
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Increment Tag (for DEV)
+        uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/git__increment-tag@dev
+        with:
+          release_type: 'minor'
+
+
 
   deploy-cbr-custom:
     timeout-minutes: 5
     name: "Deploy CBR - CBR Custom"
     runs-on: ubuntu-latest
     env:
-      S3_DEV__VERSION   : 'dev__cbr_custom'
-      FOLDER__CBR_CUSTOM: "./cbr_custom"
+      S3_DEV__VERSION   : 'dev__cbr_custom_probely'
+      FOLDER__CBR_CUSTOM: "./cbr_custom_probely"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -35,5 +46,7 @@ jobs:
           ref: ${{ env.GIT__BRANCH }}
       - name: Deploy Custom code
         uses: ./.github/actions/deploy-cbr-dev-site
+    needs:
+      increment-tag
 
 
