@@ -44,7 +44,7 @@ jobs:
         with:
           ref: ${{ env.GIT__BRANCH }}
       - name: Deploy Custom code
-        uses: ./.github/actions/deploy-cbr-custom-site
+        uses: ./.github/actions/deploy-cbr-dev-site
     needs:
       - increment-tag
 
