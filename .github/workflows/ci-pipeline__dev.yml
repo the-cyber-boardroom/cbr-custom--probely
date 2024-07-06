@@ -32,9 +32,9 @@ jobs:
 
 
 
-  deploy-cbr-custom:
+  deploy-cbr-custom-probely-dev:
     timeout-minutes: 5
-    name: "Deploy CBR - CBR Custom"
+    name: "Deploy CBR - Custom Probely (DEV)"
     runs-on: ubuntu-latest
     env:
       S3_DEV__VERSION   : 'dev__cbr_custom_probely'
